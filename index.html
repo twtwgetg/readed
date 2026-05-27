@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>红色教育 · 场景漫游</title>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <div id="app">
+    <div id="header">
+      <h1>红色教育 · 场景漫游</h1>
+      <p class="subtitle">铭记历史 · 不忘初心</p>
+    </div>
+    <div id="loading">
+      <div class="loading-text">加载场景中 <span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
+      <div class="loading-bar"><div class="loading-progress" id="loading-progress"></div></div>
+      <div class="loading-percent" id="loading-percent">0%</div>
+    </div>
+    <div id="scene-container"></div>
+    <div id="controls">
+      <div class="dpad">
+        <button id="btn-up" class="dpad-btn" aria-label="前进">▲</button>
+        <div class="dpad-row">
+          <button id="btn-left" class="dpad-btn" aria-label="左转">◀</button>
+          <button id="btn-down" class="dpad-btn" aria-label="后退">▼</button>
+          <button id="btn-right" class="dpad-btn" aria-label="右转">▶</button>
+        </div>
+      </div>
+    </div>
+    <div id="hint">键盘 WASD / 方向键 亦可控制</div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
