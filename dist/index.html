@@ -2,10 +2,10 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>红色教育 · 场景漫游</title>
-  <script type="module" crossorigin src="/assets/index-B_zRSx12.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-BSKLfqMm.css">
+  <script type="module" crossorigin src="/assets/index-rhzBH1DJ.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CffZq6Nh.css">
 </head>
 <body>
   <div id="app">
@@ -20,20 +20,31 @@
     </div>
     <div id="scene-container"></div>
     <div id="hint">WASD 移动 | 鼠标拖拽旋转视角 | 右键菜单已禁用</div>
-    <div id="rotation-controls">
-      <div class="rotation-group">
-        <button class="save-btn" id="save-camera">保存视角</button>
-        <div class="save-status" id="save-status"></div>
+    <button class="info-btn" id="show-info">景区介绍</button>
+    <button class="edit-toggle-btn" id="edit-toggle">编辑</button>
+    <div id="rotation-controls" class="edit-panel">
+      <div class="edit-panel-header">
+        <span class="edit-panel-title">编辑控制</span>
+        <button class="edit-panel-close" id="edit-panel-close">×</button>
       </div>
-      <div class="rotation-group">
-        <button class="mark-btn" id="mark-position">标注位置</button>
-        <div class="mark-status" id="mark-status"></div>
-      </div>
-      <div class="rotation-group">
-        <button class="save-btn" id="save-markers">保存标注</button>
-      </div>
-      <div class="rotation-group">
-        <button class="info-btn" id="show-info">景区介绍</button>
+      <div class="edit-panel-content">
+        <div class="edit-group">
+          <label class="grid-toggle">
+            <input type="checkbox" id="show-grid">
+            <span>显示网格</span>
+          </label>
+        </div>
+        <div class="edit-group">
+          <button class="save-btn" id="save-camera">保存视角</button>
+          <div class="save-status" id="save-status"></div>
+        </div>
+        <div class="edit-group">
+          <button class="mark-btn" id="mark-position">标注位置</button>
+          <div class="mark-status" id="mark-status"></div>
+        </div>
+        <div class="edit-group">
+          <button class="save-btn" id="save-markers">保存标注</button>
+        </div>
       </div>
     </div>
     <div id="mobile-controls">

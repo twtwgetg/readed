@@ -700,6 +700,10 @@ async function init() {
       camera.position.z -= Math.sin(yaw) * moveSpeed * 0.016
     }
 
+    // 限制相机在2米半径内
+    const camLen = camera.position.length()
+    if (camLen > 2) camera.position.multiplyScalar(2 / camLen)
+
     if (initialized) {
       const now = performance.now()
       if (now - lastCollisionCheck > 100) {
@@ -892,8 +896,8 @@ function setupMobileControls() {
     }
 
     joystickStick.style.transform = `translate(${deltaX}px, ${deltaY}px)`
-    yawDelta = -deltaX * 0.0008
-    pitchDelta = -deltaY * 0.0008
+    yawDelta = -deltaX * 0.0004
+    pitchDelta = -deltaY * 0.0004
   }
 
   const dpadButtons = document.querySelectorAll('.dpad-btn')

@@ -8,7 +8,7 @@ const state = { forward: false, backward: false, turnLeft: false, turnRight: fal
 let camera, scene, renderer
 let yaw = 0
 let moveSpeed = 2
-const ROT_SPEED = 1.8
+const ROT_SPEED = 0.9
 let gaussianMesh = null
 let sortData = null
 let depthArray = null
@@ -20,7 +20,7 @@ let sortCount = 0
 
 function initScene() {
   scene = new THREE.Scene()
-  scene.background = new THREE.Color(0x333333)
+  scene.background = new THREE.Color(0x1a1a1a)
 
   camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 2000)
 
@@ -144,7 +144,7 @@ void main() {
   float mahal = d.x*(a*d.x + b*d.y) + d.y*(b*d.x + c*d.y);
 
   float alpha = min(vAlpha * exp(-0.5 * mahal), 1.0);
-  if (alpha < 0.004) alpha = 0.3;
+  if (alpha < 0.004) discard;
 
   gl_FragColor = vec4(vColor, alpha);
 }
@@ -372,18 +372,15 @@ async function loadScene() {
   scene.add(gaussianMesh)
   console.log('[GS] 高斯网格创建耗时:', (performance.now() - t1).toFixed(0), 'ms')
 
-
-
+  // 网格居中
+  gaussianMesh.position.set(-bounds.cx, -bounds.cy, -bounds.cz)
   camera.far = Math.max(500, bounds.size * 2.5)
   camera.updateProjectionMatrix()
   moveSpeed = Math.max(1, bounds.size * 0.4)
 
-  const eyeH = Math.max(1.5, bounds.cy - bounds.sy * 0.3)
-  camera.position.set(bounds.cx + bounds.sx * 0.05, bounds.cy + bounds.sy * 0.5, bounds.cz + bounds.sz * 0.8)
-  yaw = Math.atan2(-(bounds.cx - camera.position.x), -(bounds.cz - camera.position.z))
-
-  const fwd = new THREE.Vector3(-Math.sin(yaw), 0, -Math.cos(yaw))
-  camera.lookAt(new THREE.Vector3(bounds.cx, bounds.cy, bounds.cz))
+  camera.position.set(0, 0, 1.5)
+  yaw = 0
+  camera.lookAt(0, 0, 0)
 
   $('loading').classList.add('hidden')
   state.loaded = true
@@ -402,11 +399,10 @@ function animate(time) {
     if (state.backward) camera.position.addScaledVector(dir, -speed)
     if (state.turnLeft) yaw += ROT_SPEED * delta
     if (state.turnRight) yaw -= ROT_SPEED * delta
-    camera.lookAt(new THREE.Vector3(
-      camera.position.x + dir.x,
-      camera.position.y,
-      camera.position.z + dir.z
-    ))
+    // 限制相机在2米半径内
+    const len = camera.position.length()
+    if (len > 2) camera.position.multiplyScalar(2 / len)
+    camera.lookAt(0, 0, 0)
     needsSort = true
   }
 
@@ -422,15 +418,6 @@ function animate(time) {
   }
 
   renderer.render(scene, camera)
-
-  // 每60帧输出一次渲染统计
-  if (Math.floor(time / 1000) % 2 === 0 && !window._logged) {
-    window._logged = true
-    const info = renderer.info
-    console.log('[RENDER]', 'triangles:', info.render.triangles, 'calls:', info.render.calls, 'points:', info.render.points)
-    console.log('[RENDER] programs:', info.programs?.length, 'geometries:', info.memory?.geometries, 'textures:', info.memory?.textures)
-  }
-  if (Math.floor(time / 1000) % 2 !== 0) window._logged = false
 }
 
 function setupControls() {
