@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>红色教育 · 场景漫游</title>
   <link rel="stylesheet" href="/src/style.css">
 </head>
@@ -13,23 +13,135 @@
       <p class="subtitle">铭记历史 · 不忘初心</p>
     </div>
     <div id="loading">
-      <div class="loading-text">加载场景中 <span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
+      <div class="loading-text" id="loading-text">加载场景中 <span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
       <div class="loading-bar"><div class="loading-progress" id="loading-progress"></div></div>
       <div class="loading-percent" id="loading-percent">0%</div>
     </div>
     <div id="scene-container"></div>
-    <div id="controls">
-      <div class="dpad">
-        <button id="btn-up" class="dpad-btn" aria-label="前进">▲</button>
-        <div class="dpad-row">
-          <button id="btn-left" class="dpad-btn" aria-label="左转">◀</button>
-          <button id="btn-down" class="dpad-btn" aria-label="后退">▼</button>
-          <button id="btn-right" class="dpad-btn" aria-label="右转">▶</button>
+    <div id="hint">WASD 移动 | 鼠标拖拽旋转视角 | 右键菜单已禁用</div>
+    <button class="info-btn" id="show-info">景区介绍</button>
+    <button class="edit-toggle-btn" id="edit-toggle">编辑</button>
+    <div id="rotation-controls" class="edit-panel">
+      <div class="edit-panel-header">
+        <span class="edit-panel-title">编辑控制</span>
+        <button class="edit-panel-close" id="edit-panel-close">×</button>
+      </div>
+      <div class="edit-panel-content">
+        <div class="edit-group">
+          <label class="grid-toggle">
+            <input type="checkbox" id="show-grid">
+            <span>显示网格</span>
+          </label>
+        </div>
+        <div class="edit-group">
+          <button class="save-btn" id="save-camera">保存视角</button>
+          <div class="save-status" id="save-status"></div>
+        </div>
+        <div class="edit-group">
+          <button class="mark-btn" id="mark-position">标注位置</button>
+          <div class="mark-status" id="mark-status"></div>
+        </div>
+        <div class="edit-group">
+          <button class="save-btn" id="save-markers">保存标注</button>
         </div>
       </div>
     </div>
-    <div id="hint">键盘 WASD / 方向键 亦可控制</div>
+    <div id="mobile-controls">
+      <div id="move-pad" class="control-pad">
+        <div class="dpad">
+          <div class="dpad-row">
+            <div class="dpad-btn" id="dpad-up" data-direction="forward">↑</div>
+          </div>
+          <div class="dpad-row">
+            <div class="dpad-btn" id="dpad-left" data-direction="left">←</div>
+            <div class="dpad-center"></div>
+            <div class="dpad-btn" id="dpad-right" data-direction="right">→</div>
+          </div>
+          <div class="dpad-row">
+            <div class="dpad-btn" id="dpad-down" data-direction="backward">↓</div>
+          </div>
+        </div>
+      </div>
+      <div id="rotate-pad" class="control-pad">
+        <div class="joystick-container">
+          <div class="joystick-base"></div>
+          <div class="joystick-stick" id="joystick-stick"></div>
+        </div>
+        <div class="joystick-label">旋转视角</div>
+      </div>
+    </div>
+    <div id="marker-panel" class="marker-panel">
+      <div class="marker-panel-header">
+        <span class="marker-panel-title">标注编辑</span>
+        <button class="marker-panel-close" id="marker-panel-close">×</button>
+      </div>
+      <div class="marker-form-group">
+        <label class="marker-label">交互类型</label>
+        <select id="marker-interaction-type" class="marker-select">
+          <option value="click">点击触发</option>
+          <option value="proximity">靠近触发</option>
+        </select>
+      </div>
+      <div class="marker-form-group" id="marker-radius-group">
+        <label class="marker-label">交互半径</label>
+        <input type="number" id="marker-radius" class="marker-input" value="2" min="0.5" max="10" step="0.5">
+      </div>
+      <div class="marker-form-group">
+        <label class="marker-label">提示内容</label>
+        <textarea id="marker-content" class="marker-content" placeholder="输入提示内容..."></textarea>
+      </div>
+      <div class="marker-panel-actions">
+        <button class="marker-delete-btn" id="marker-delete-btn">删除</button>
+        <button class="marker-save-btn" id="marker-save-btn">保存</button>
+      </div>
+    </div>
+    <div id="interaction-popup" class="interaction-popup">
+      <div class="interaction-popup-content">
+        <span class="interaction-popup-text" id="interaction-popup-text"></span>
+        <button class="interaction-popup-close" id="interaction-popup-close">×</button>
+      </div>
+    </div>
+    <div id="info-panel" class="info-panel">
+      <div class="info-panel-header">
+        <span class="info-panel-title">景区介绍</span>
+        <button class="info-panel-close" id="info-panel-close">×</button>
+      </div>
+      <div class="info-panel-content" id="info-panel-content">
+        <h3>红色革命纪念馆</h3>
+        <p>
+          红色革命纪念馆位于风景秀丽的山区，是一座集历史展览、文化传承、爱国主义教育于一体的综合性纪念馆。馆内珍藏着大量珍贵的历史文物和文献资料，生动再现了中国革命的光辉历程。
+        </p>
+        <h3>历史背景</h3>
+        <p>
+          纪念馆始建于1958年，占地面积约50亩，建筑面积达8000平方米。馆内设有多个展厅，分别展示不同历史时期的革命事迹和英雄人物。
+        </p>
+        <h3>主要展厅</h3>
+        <ul>
+          <li><strong>第一展厅 - 革命起源</strong>：展示中国共产党早期发展历程，包括南湖红船、五四运动等重要历史事件。</li>
+          <li><strong>第二展厅 - 抗日战争</strong>：展示抗日战争时期的英雄事迹，包括平型关大捷、百团大战等著名战役。</li>
+          <li><strong>第三展厅 - 解放战争</strong>：展示解放战争时期的重要战役和历史转折，包括三大战役的详细介绍。</li>
+          <li><strong>第四展厅 - 新时代</strong>：展示新中国成立后的发展成就，以及新时代中国特色社会主义建设的伟大成就。</li>
+        </ul>
+        <h3>参观指南</h3>
+        <p>
+          <strong>开放时间：</strong>每周二至周日 9:00 - 17:00（周一闭馆）
+        </p>
+        <p>
+          <strong>门票信息：</strong>免费开放，需提前预约
+        </p>
+        <p>
+          <strong>讲解服务：</strong>提供专业讲解员服务，需提前预约
+        </p>
+        <h3>教育意义</h3>
+        <p>
+          红色革命纪念馆是重要的爱国主义教育基地，每年接待大量学生和社会团体参观学习。通过参观纪念馆，人们可以深入了解中国革命的艰难历程，铭记革命先烈的牺牲精神，传承和弘扬红色文化。
+        </p>
+        <p>
+          纪念馆还定期举办各种主题展览和教育活动，包括红色电影放映、专题讲座、青少年夏令营等，旨在通过多种形式传播红色文化，培养新一代的爱国主义情怀。
+        </p>
+      </div>
+    </div>
   </div>
-  <script type="module" src="/src/main.js"></script>
+  <script type="module" src="/src/main-spark-fps.js"></script>
 </body>
 </html>
