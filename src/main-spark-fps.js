@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { SparkRenderer, SplatMesh } from '@sparkjsdev/spark'
 
-const SPZ_URL = '/scene.spz'
+const SPZ_URL = 'https://cdn.jsdelivr.net/gh/twtwgetg/readed@main/dist/scene.spz'
 const STORAGE_KEY = 'spark_camera_config'
 const MARKERS_KEY = 'spark_markers'
 

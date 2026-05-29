@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { SplatMesh, SplatFileType } from '@sparkjsdev/spark'
 
-const SPZ_URL = '/scene.spz'
+const SPZ_URL = 'https://cdn.jsdelivr.net/gh/twtwgetg/readed@main/dist/scene.spz'
 
 let camera, scene, renderer
 let splatMesh = null
