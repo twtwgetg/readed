@@ -686,6 +686,12 @@ async function init() {
 
   setupControls()
   document.getElementById('save-markers').addEventListener('click', saveMarkers)
+  document.getElementById('clear-markers').addEventListener('click', () => {
+    if (confirm('确定要清空所有标注吗？刷新后将使用默认标注。')) {
+      localStorage.removeItem(MARKERS_KEY)
+      location.reload()
+    }
+  })
   document.getElementById('marker-panel-close').addEventListener('click', hideMarkerPanel)
   document.getElementById('marker-delete-btn').addEventListener('click', deleteMarker)
   document.getElementById('marker-save-btn').addEventListener('click', saveMarkerContent)
