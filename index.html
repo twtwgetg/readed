@@ -42,6 +42,12 @@
           <div class="mark-status" id="mark-status"></div>
         </div>
         <div class="edit-group">
+          <label class="grid-toggle">
+            视野角度: <span id="fov-value">90°</span>
+          </label>
+          <input type="range" id="fov-slider" min="30" max="120" value="90" style="width: 100%;">
+        </div>
+        <div class="edit-group">
           <button class="save-btn" id="save-markers">保存标注</button>
         </div>
       </div>
@@ -54,20 +60,10 @@
           </div>
           <div class="dpad-row">
             <div class="dpad-btn" id="dpad-left" data-direction="left">←</div>
-            <div class="dpad-center"></div>
+            <div class="dpad-btn" id="dpad-down" data-direction="backward">↓</div>
             <div class="dpad-btn" id="dpad-right" data-direction="right">→</div>
           </div>
-          <div class="dpad-row">
-            <div class="dpad-btn" id="dpad-down" data-direction="backward">↓</div>
-          </div>
         </div>
-      </div>
-      <div id="rotate-pad" class="control-pad">
-        <div class="joystick-container">
-          <div class="joystick-base"></div>
-          <div class="joystick-stick" id="joystick-stick"></div>
-        </div>
-        <div class="joystick-label">旋转视角</div>
       </div>
     </div>
     <div id="marker-panel" class="marker-panel">

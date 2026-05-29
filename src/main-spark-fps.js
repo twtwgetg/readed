@@ -6,11 +6,11 @@ const STORAGE_KEY = 'spark_camera_config'
 const MARKERS_KEY = 'spark_markers'
 
 const DEFAULT_CAMERA_CONFIG = {
-  yaw: -1.506,
-  pitch: 0.15,
-  positionX: 0.18931372006272576,
+  yaw: -5.3123999999999825,
+  pitch: -0.1983999999999987,
+  positionX: -0.2691552738418208,
   positionY: 0,
-  positionZ: 0.11072000824999695
+  positionZ: 0.05658951360861294
 }
 
 let camera, scene, renderer, spark
@@ -392,28 +392,84 @@ const DEFAULT_MARKERS = [
     "content": "这是一杆三八大盖"
   },
   {
-    "positionX": 5.484423010144513,
-    "positionY": 1.6596440648421587,
-    "positionZ": -0.09812710354593937,
+    "positionX": -0.8122507052967634,
+    "positionY": -0.6439847618826025,
+    "positionZ": -1.319595888637088,
     "interactionType": "click",
     "radius": 2,
-    "content": "比较机密的单位才有供电"
+    "content": "桌子"
   },
   {
-    "positionX": 3.8908712570645214,
-    "positionY": -0.20181829830031686,
-    "positionZ": 1.1625676439693167,
+    "positionX": -1.3877308219194826,
+    "positionY": -0.3916752799381903,
+    "positionZ": -0.840835920797589,
     "interactionType": "click",
     "radius": 2,
-    "content": "一张床"
+    "content": "步枪"
   },
   {
-    "positionX": 5.187959499732977,
-    "positionY": -0.003335211036597692,
-    "positionZ": 0.01843076495278101,
+    "positionX": -1.3390051549230066,
+    "positionY": -0.9478907894955544,
+    "positionZ": -0.7398985964242942,
     "interactionType": "click",
     "radius": 2,
-    "content": "一张桌子"
+    "content": "步枪"
+  },
+  {
+    "positionX": 0.0955510132135029,
+    "positionY": -0.8065390368079561,
+    "positionZ": -1.816768180158634,
+    "interactionType": "click",
+    "radius": 2,
+    "content": "战士休息的床"
+  },
+  {
+    "positionX": 0.6946088789092725,
+    "positionY": -0.7737225218457807,
+    "positionZ": -1.6764545161914666,
+    "interactionType": "click",
+    "radius": 2,
+    "content": "战士休息的床"
+  },
+  {
+    "positionX": 0.3424356469560801,
+    "positionY": 0.911459080743348,
+    "positionZ": 2.1231514884838005,
+    "interactionType": "click",
+    "radius": 2,
+    "content": "战士涂鸦"
+  },
+  {
+    "positionX": -0.04956892442043559,
+    "positionY": -0.3318997410795529,
+    "positionZ": 1.9661744266913272,
+    "interactionType": "click",
+    "radius": 2,
+    "content": "凳子"
+  },
+  {
+    "positionX": -0.68251572704319,
+    "positionY": 0.48750118439062795,
+    "positionZ": 3.1880914737697212,
+    "interactionType": "click",
+    "radius": 2,
+    "content": "炊具"
+  },
+  {
+    "positionX": -1.1840763069617477,
+    "positionY": 0.4798418914277082,
+    "positionZ": 3.317199637044287,
+    "interactionType": "click",
+    "radius": 2,
+    "content": "炊具"
+  },
+  {
+    "positionX": -5.878403846369688,
+    "positionY": -1.1339582773338397,
+    "positionZ": -0.16246704441377757,
+    "interactionType": "click",
+    "radius": 2,
+    "content": ""
   }
 ]
 
@@ -549,7 +605,7 @@ async function init() {
   scene = new THREE.Scene()
   scene.background = new THREE.Color(0x111111)
 
-  camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 5000)
+  camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 5000)
   camera.position.set(0, 0, 0)
 
   renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -654,6 +710,16 @@ async function init() {
     toggleGridVisibility(e.target.checked)
   })
 
+  // 视野滑块控制
+  const fovSlider = document.getElementById('fov-slider')
+  const fovValue = document.getElementById('fov-value')
+  fovSlider.addEventListener('input', (e) => {
+    const newFov = parseFloat(e.target.value)
+    camera.fov = newFov
+    camera.updateProjectionMatrix()
+    fovValue.textContent = newFov + '°'
+  })
+
   document.getElementById('edit-toggle').addEventListener('click', toggleEditMode)
   document.getElementById('edit-panel-close').addEventListener('click', toggleEditMode)
 
@@ -684,20 +750,20 @@ async function init() {
     const oldPosition = camera.position.clone()
 
     if (state.forward) {
-      camera.position.x -= Math.sin(yaw) * moveSpeed * 0.016
-      camera.position.z -= Math.cos(yaw) * moveSpeed * 0.016
+      camera.position.x -= Math.sin(yaw) * moveSpeed * 0.016 * 0.3
+      camera.position.z -= Math.cos(yaw) * moveSpeed * 0.016 * 0.3
     }
     if (state.backward) {
-      camera.position.x += Math.sin(yaw) * moveSpeed * 0.016
-      camera.position.z += Math.cos(yaw) * moveSpeed * 0.016
+      camera.position.x += Math.sin(yaw) * moveSpeed * 0.016 * 0.3
+      camera.position.z += Math.cos(yaw) * moveSpeed * 0.016 * 0.3
     }
     if (state.left) {
-      camera.position.x -= Math.cos(yaw) * moveSpeed * 0.016
-      camera.position.z += Math.sin(yaw) * moveSpeed * 0.016
+      camera.position.x -= Math.cos(yaw) * moveSpeed * 0.016 * 0.3
+      camera.position.z += Math.sin(yaw) * moveSpeed * 0.016 * 0.3
     }
     if (state.right) {
-      camera.position.x += Math.cos(yaw) * moveSpeed * 0.016
-      camera.position.z -= Math.sin(yaw) * moveSpeed * 0.016
+      camera.position.x += Math.cos(yaw) * moveSpeed * 0.016 * 0.3
+      camera.position.z -= Math.sin(yaw) * moveSpeed * 0.016 * 0.3
     }
 
     // 限制相机在2米半径内
@@ -712,14 +778,6 @@ async function init() {
           camera.position.copy(oldPosition)
         }
       }
-    }
-
-    if (yawDelta !== 0 || pitchDelta !== 0) {
-      yaw += yawDelta
-      pitch += pitchDelta
-      const minPitch = -40 * Math.PI / 180
-      const maxPitch = 50 * Math.PI / 180
-      pitch = Math.max(minPitch, Math.min(maxPitch, pitch))
     }
 
     if (initialized) {
@@ -829,8 +887,8 @@ function setupControls() {
     const deltaX = e.clientX - state.lastMouse.x
     const deltaY = e.clientY - state.lastMouse.y
 
-    yaw -= deltaX * 0.002
-    pitch -= deltaY * 0.002
+    yaw -= deltaX * 0.0026
+    pitch -= deltaY * 0.0026
     pitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, pitch))
 
     state.lastMouse.x = e.clientX
@@ -839,6 +897,19 @@ function setupControls() {
 
   renderer.domElement.addEventListener('contextmenu', (e) => e.preventDefault())
 
+  // 滚轮缩放
+  renderer.domElement.addEventListener('wheel', (e) => {
+    e.preventDefault()
+    const minFov = 30
+    const maxFov = 120
+    const zoomSpeed = 2
+    camera.fov = Math.max(minFov, Math.min(maxFov, camera.fov + e.deltaY * zoomSpeed * 0.1))
+    camera.updateProjectionMatrix()
+    // 更新滑块和显示值
+    fovSlider.value = camera.fov
+    fovValue.textContent = Math.round(camera.fov) + '°'
+  })
+
   setupMobileControls()
 }
 
@@ -846,59 +917,67 @@ let yawDelta = 0
 let pitchDelta = 0
 
 function setupMobileControls() {
-  const joystickStick = document.getElementById('joystick-stick')
-  const joystickContainer = document.querySelector('.joystick-container')
-  let isDragging = false
-  const stickRadius = 40
+  let isRotating = false
+  let lastTouchX = 0
+  let lastTouchY = 0
 
-  joystickContainer.addEventListener('touchstart', (e) => {
-    isDragging = true
-    updateJoystickPosition(e.touches[0].clientX, e.touches[0].clientY)
+  // 检测触摸点是否在UI元素上
+  function isTouchOnUI(element) {
+    const uiElements = [
+      'mobile-controls',
+      'rotation-controls',
+      'marker-panel',
+      'interaction-popup',
+      'info-panel',
+      'show-info',
+      'edit-toggle',
+      'edit-panel-close',
+      'marker-panel-close',
+      'info-panel-close'
+    ]
+    
+    while (element) {
+      if (uiElements.includes(element.id)) {
+        return true
+      }
+      element = element.parentElement
+    }
+    return false
+  }
+
+  // 屏幕滑动控制摄影机旋转
+  document.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0]
+    const target = document.elementFromPoint(touch.clientX, touch.clientY)
+    
+    if (!isTouchOnUI(target)) {
+      isRotating = true
+      lastTouchX = touch.clientX
+      lastTouchY = touch.clientY
+    }
   }, { passive: false })
 
   document.addEventListener('touchmove', (e) => {
-    if (isDragging) {
-      e.preventDefault()
-      updateJoystickPosition(e.touches[0].clientX, e.touches[0].clientY)
-    }
+    if (!isRotating) return
+    
+    e.preventDefault()
+    const touch = e.touches[0]
+    
+    const deltaX = touch.clientX - lastTouchX
+    const deltaY = touch.clientY - lastTouchY
+    
+    // 更新旋转角度
+    yaw -= deltaX * 0.0026
+    pitch -= deltaY * 0.0026
+    pitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, pitch))
+    
+    lastTouchX = touch.clientX
+    lastTouchY = touch.clientY
   }, { passive: false })
 
   document.addEventListener('touchend', () => {
-    if (isDragging) {
-      isDragging = false
-      joystickStick.style.transform = 'translate(-50%, -50%)'
-      yawDelta = 0
-      pitchDelta = 0
-    }
+    isRotating = false
   })
-
-  function updateJoystickPosition(clientX, clientY) {
-    const rect = joystickContainer.getBoundingClientRect()
-    const centerX = rect.left + rect.width / 2
-    const centerY = rect.top + rect.height / 2
-
-    let deltaX = clientX - centerX
-    let deltaY = clientY - centerY
-    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
-
-    const deadZone = 8
-    if (distance < deadZone) {
-      yawDelta = 0
-      pitchDelta = 0
-      joystickStick.style.transform = 'translate(-50%, -50%)'
-      return
-    }
-
-    if (distance > stickRadius) {
-      const scale = stickRadius / distance
-      deltaX *= scale
-      deltaY *= scale
-    }
-
-    joystickStick.style.transform = `translate(${deltaX}px, ${deltaY}px)`
-    yawDelta = -deltaX * 0.0004
-    pitchDelta = -deltaY * 0.0004
-  }
 
   const dpadButtons = document.querySelectorAll('.dpad-btn')
   dpadButtons.forEach(btn => {
